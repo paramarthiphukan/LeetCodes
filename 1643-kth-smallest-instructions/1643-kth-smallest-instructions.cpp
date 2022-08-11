@@ -1,9 +1,9 @@
 class Solution
 {
-int comb(int n, int r) 
+int comb(int n, int m) 
 {
         long ans = 1;
-        for (int i = 1, j = n - r + 1; i <= r; ++i, ++j) 
+        for (int i = 1, j = n - m + 1; i <= m; ++i, ++j) 
         ans = ans * j / i;
         return ans;
     }
