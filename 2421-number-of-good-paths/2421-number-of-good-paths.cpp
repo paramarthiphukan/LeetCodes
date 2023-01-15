@@ -1,33 +1,34 @@
 class Solution {
 public:
-    int numberOfGoodPaths(vector<int>& vals, vector<vector<int>>& edges) {
-        unordered_map<int, unordered_map<int,int>> valueFreqMap;
-        int n = vals.size(), iFather, jFather, iCount, jCount, currVal, res = n;
-        vector<int> father(n);
-        for(int i = 0; i < n; i++)
-            father[i] = i;
-        for(int i = 0; i < n; i++)
-            valueFreqMap[i][vals[i]] = 1;
-        vector<vector<int>> sortValEdges;
-        for(auto edge : edges)
-            sortValEdges.push_back({max(vals[edge[0]], vals[edge[1]]), edge[0], edge[1]});
-        sort(sortValEdges.begin(), sortValEdges.end());
-        for(auto &x : sortValEdges) {
-            currVal = x[0];
-            iFather = find(father, x[1]);
-            jFather = find(father, x[2]);
-            iCount = valueFreqMap[iFather][currVal];
-            jCount = valueFreqMap[jFather][currVal];
-            res += iCount*jCount;
-            father[jFather] = iFather;
-            valueFreqMap[iFather][currVal] = iCount + jCount;
-        }
-        return res;
-
-    }
-    int find(vector<int>& father, int x) {
-        if(father[x] != x)
-            father[x] = find(father, father[x]);
-        return father[x];
-    }
+	int find(vector<int>& y,int i) {
+		if(i==y[i]) return i;
+		y[i]=find(y,y[i]);
+		return y[i];
+	}
+	int numberOfGoodPaths(vector<int>& vals, vector<vector<int>>& edges) {
+        int n = vals.size(),m=edges.size(),ans=0;
+		vector<vector<int>> x(n);
+		vector<int> y(n);
+		for(int i=0;i<n;i++){
+			y[i]=i;
+			x[i]={vals[i],1};
+		}
+        sort(edges.begin(),edges.end(),[&](vector<int>& a,vector<int>& b){
+	    	return max(vals[a[0]],vals[a[1]])<max(vals[b[0]],vals[b[1]]);
+		});
+		for(int i=0;i<m;i++){
+			int a=find(y,edges[i][0]);
+			int b=find(y,edges[i][1]);
+			if(x[a][0]!=x[b][0]){
+				if(x[a][0]>x[b][0]) y[b]=a;
+				else y[a]=b;
+			}
+			else{
+				y[a]=b;
+				ans+=x[a][1]*x[b][1];
+				x[b][1]+=x[a][1];
+			}
+		}
+		return ans+n;
+	}
 };
