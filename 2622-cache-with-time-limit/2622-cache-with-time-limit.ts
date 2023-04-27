@@ -1,12 +1,16 @@
-class TimeLimitedCache {
-    keyValue: {
-        [key: string]: {
+class TimeLimitedCache 
+{
+    keyValue: 
+    {
+        [key: string]:
+        {
             value: number;
             expiredTime: number;
         }
     }
 
-    constructor() {
+    constructor()
+{
         this.keyValue = {};
     }
 
@@ -23,7 +27,8 @@ class TimeLimitedCache {
         return isKeyExist;
     }
 
-    get(key: number): number {
+    get(key: number): number 
+    {
         if(!this.keyValue[key]) return -1;
         
         if(Date.now() > this.keyValue[key].expiredTime) return -1;
@@ -31,10 +36,12 @@ class TimeLimitedCache {
         return this.keyValue[key].value;
     }
 
-	count(): number {
+	count(): number
+    {
         let currentTime = Date.now();
 
-        return Object.values(this.keyValue).reduce((acc, curr) => {
+        return Object.values(this.keyValue).reduce((acc, curr) => 
+                                                   {
             if(currentTime < curr.expiredTime) acc += 1;
 
             return acc;
